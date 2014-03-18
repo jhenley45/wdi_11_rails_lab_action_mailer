@@ -54,6 +54,11 @@ class BooksController < ApplicationController
     @book.user = new_user
     @book.save
 
+    email_to_new = new_user.email
+    subject_new = 'You stole a book!'
+    body_new = "Great job, you stole \"#{@book.title}\" from #{old_user.email} "
+    Pony.mail(to: email_to_new, subject: subject_new, body: body_new, from: 'sumbody@aol.com')
+
     redirect_to :books, notice: "Email Sent"
 
     # respond_to do |format|
