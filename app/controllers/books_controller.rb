@@ -42,12 +42,19 @@ class BooksController < ApplicationController
   # PATCH/PUT /books/1.json
   def update
     old_user = @book.user
-    @book.send_old_owner(old_user)
+    # @book.send_old_owner(old_user)
+
+    email_to = old_user.email
+    subject = 'Someone stole your book!'
+    body = 'You idiot, someone stole your book.'
+    Pony.mail(to: email_to, subject: subject, body: body, from: 'oldmcdonald@hadafarm.com')
+
+
     new_user = current_user
     @book.user = new_user
     @book.save
 
-    redirect_to root_path
+    redirect_to :books, notice: "Email Sent"
 
     # respond_to do |format|
     #   if @book.update(book_params)
