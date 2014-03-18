@@ -14,7 +14,7 @@
   <tbody>
     <% @greetings.each do |greeting| %>
       <tr>
-        <td><%= greeting.email %></td>
+        <td><%= greeting.visitor_email %></td>
         <td><%= greeting.content %></td>
         <td><%= link_to 'Show', greeting %></td>
         <td><%= link_to 'Edit', edit_greeting_path(greeting) %></td>
