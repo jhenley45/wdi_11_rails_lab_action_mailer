@@ -44,20 +44,20 @@ class BooksController < ApplicationController
     old_user = @book.user
     # @book.send_old_owner(old_user)
 
-    email_to = old_user.email
-    subject = 'Someone stole your book!'
-    body = 'You idiot, someone stole your book.'
-    Pony.mail(to: email_to, subject: subject, body: body, from: 'oldmcdonald@hadafarm.com')
+
+    #Resque.enqueue(EmailWorker, old_user.id)
 
 
     new_user = current_user
     @book.user = new_user
     @book.save
 
-    email_to_new = new_user.email
-    subject_new = 'You stole a book!'
-    body_new = "Great job, you stole \"#{@book.title}\" from #{old_user.email} "
-    Pony.mail(to: email_to_new, subject: subject_new, body: body_new, from: 'sumbody@aol.com')
+    Resque.enqueue(EmailWorker, old_user.id, new_user.id)
+
+    # email_to_new = new_user.email
+    # subject_new = 'You stole a book!'
+    # body_new = "Great job, you stole \"#{@book.title}\" from #{old_user.email} "
+    # Pony.mail(to: email_to_new, subject: subject_new, body: body_new, from: 'sumbody@aol.com')
 
     redirect_to :books, notice: "Email Sent"
 
